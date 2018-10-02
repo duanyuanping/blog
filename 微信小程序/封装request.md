@@ -184,7 +184,7 @@ const request = options => {
 
 上面有一个 notLoading 的数组，那个数组存放的是不需要显示 loading 效果的请求。这样统一展示隐藏 loading 效果，就不需要每次请求都去单独写 loading 效果了。
 
-如果感觉看了觉得代码有点乱，没理清楚可以看此目录下的 code 目录下的 (request.js)[]。
+如果感觉看了觉得代码有点乱，没理清楚可以看此目录下的 code目录下的 [request.js](https://github.com/duanyuanping/True-in-Hong/blob/master/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/code/request.js)。
 
 
 
