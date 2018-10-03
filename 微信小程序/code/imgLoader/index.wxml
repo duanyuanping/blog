@@ -1,0 +1,4 @@
+<view class="image-wrap" style="position: relative;">
+  <image class="default" src="{{defaultUrl}}" mode="widthFix" style="opacity: {{finish ? 0 : 1}};"></image>
+  <image class="origin" src="{{originUrl}}" mode="widthFix" bindload="loadsuccess" binderror="loaderror" style="opacity: {{finish ? 1 : 0}};"></image>
+</view>
