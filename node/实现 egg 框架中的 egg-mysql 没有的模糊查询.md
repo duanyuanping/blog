@@ -136,4 +136,4 @@ module.exports = UserService;
 
 **注意**：模糊查询的条件属性名是 SQL_like 是 where 对象的一个属性。 
 
-如果想看完整的 BaseService.js 文件请移步同目录下的 [BaseService.js]()。
+如果想看完整的 BaseService.js 文件请移步同目录中 code 目录下的 [BaseService.js](https://github.com/duanyuanping/True-in-Hong/blob/master/node/code/BaseService.js)。
