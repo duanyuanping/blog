@@ -158,6 +158,6 @@ btn.onclick = function() {
 }
 ```
 
-![](https://github.com/duanyuanping/True-in-Hong/blob/master/static/\requestAnimationFrame.gif)
+![](https://github.com/duanyuanping/True-in-Hong/blob/master/static/requestAnimationFrame.gif)
 
 gif 图的原因展示有点卡，中间我点击暂停了两次。
