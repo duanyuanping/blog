@@ -51,7 +51,7 @@ headers.append('Content-Type', 'application/json');
 headers.append('test', '1111111111');
 ```
 
-![1539867202186](https://github.com/duanyuanping/True-in-Hong/blob/master/static/1539867202186.png)
+![1539867202186](http://p86utdi99.bkt.clouddn.com/1539867202186.png)
 
 其中我们调用 headers 对象中的 get 函数来获取 headers 中的某个属性的值:
 
@@ -65,7 +65,7 @@ headers.get('Content-Type'); // "application/json"
 headers.set('test', '22222222222');
 ```
 
-![1539867225730](https://github.com/duanyuanping/True-in-Hong/blob/master/static/1539867225730.png)
+![1539867225730](http://p86utdi99.bkt.clouddn.com/1539867225730.png)
 
 
 

@@ -10,7 +10,7 @@
 
 webview 是是客户端中的一种能力，即客户端能够使用 webview 这一类的 api 来实现在客户端嵌入一个小型的浏览器，用来加载前端页面。如下图展示的图片，如果该内容使用的 hybrid 技术：
 
-![1540176671109](https://github.com/duanyuanping/True-in-Hong/blob/master/static/1540176671109.png)
+![1540176671109](http://p86utdi99.bkt.clouddn.com/1540176671109.png)
 
 ### 资源加载
 
@@ -26,7 +26,7 @@ file:///C:/Workspace/test/public/index.html
 
 盗一张别人的图
 
-![1540178859261](https://github.com/duanyuanping/True-in-Hong/blob/master/static/1540178859261.png)
+![1540178859261](http://p86utdi99.bkt.clouddn.com/1540178859261.png)
 
 #### 数据加载
 
@@ -42,7 +42,7 @@ file:///C:/Workspace/test/public/index.html
 
 下图还是盗用别人的图：
 
-![1540182732858](https://github.com/duanyuanping/True-in-Hong/blob/master/static/1540182732858.png)
+![1540182732858](http://p86utdi99.bkt.clouddn.com/1540182732858.png)
 
 注：上面的是 server 端的资源，下面的一列是各个用户手机中的客户端。图里面的  v 是时间戳（版本号）。
 
