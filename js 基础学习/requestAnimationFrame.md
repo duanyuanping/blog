@@ -31,7 +31,7 @@ requestAnimationFrame(() => {
 })
 ```
 
-![](http://p86utdi99.bkt.clouddn.com/1539697608071.png)
+![1539697608071](http://testduan.oss-cn-beijing.aliyuncs.com/blog-img/1539697608071.png)
 
 这里没第一帧没执行完就执行下一帧问题上面已经说了是什么原因。
 
@@ -58,9 +58,9 @@ requestAnimationFrame(() => {
 })
 ```
 
-![](http://p86utdi99.bkt.clouddn.com/1539697809670.png)
+![1539697809670](http://testduan.oss-cn-beijing.aliyuncs.com/blog-img/1539697809670.png)
 
-![](http://p86utdi99.bkt.clouddn.com/1539697831310.png)
+![1539697831310](http://testduan.oss-cn-beijing.aliyuncs.com/blog-img/1539697831310.png)
 
 第一帧队列最前面还没有执行完，就执行第一帧执行队列中的其他函数了，不太清楚这是怎么回事？如果到时我还没想通，有谁看到这篇文章了，麻烦说下出现这种情况的原因。
 
@@ -77,7 +77,7 @@ requestAnimationFrame(timeStamp => {
 })
 ```
 
-![](http://p86utdi99.bkt.clouddn.com/1539698110281.png)
+![1539698110281](http://testduan.oss-cn-beijing.aliyuncs.com/blog-img/1539698110281.png)
 
 ```
 requestAnimationFrame(timeStamp => {
@@ -91,7 +91,7 @@ requestAnimationFrame(timeStamp => {
 })
 ```
 
-![](http://p86utdi99.bkt.clouddn.com/1539698206123.png)
+![1539698206123](http://testduan.oss-cn-beijing.aliyuncs.com/blog-img/1539698206123.png)
 
 此函数会返回一个整数，这个整数是请求 ID ，是回调队列中唯一的表示，我们可以将此 ID 传入 cancelAnimationFrame 函数，来取消回调函数的执行。
 
@@ -109,7 +109,7 @@ let b = requestAnimationFrame(function test() {
 });
 ````
 
-![](http://p86utdi99.bkt.clouddn.com/1539702698740.png)
+![1539702698740](http://testduan.oss-cn-beijing.aliyuncs.com/blog-img/1539702698740.png)
 
 ## 兼容
 
@@ -158,6 +158,6 @@ btn.onclick = function() {
 }
 ```
 
-![](http://p86utdi99.bkt.clouddn.com/requestAnimationFrame.gif)
+![requestAnimationFrame](http://testduan.oss-cn-beijing.aliyuncs.com/blog-img/requestAnimationFrame.gif)
 
 gif 图的原因展示有点卡，中间我点击暂停了两次。
