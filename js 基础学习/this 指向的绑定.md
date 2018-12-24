@@ -265,7 +265,54 @@ obj.foo()
 // 这里将打印 window 对象，因为在开始定义的时候本作用域中的 this 指向的是 window 对象
 ```
 
+## call & apply 实现
 
+前面已经展示了 bind 的实现，那么这里将展示 call 和 apply 模拟实现：
+
+### call 模拟实现
+
+```
+// 这里 call 是 es3 就支持了，所以就不使用 es6 的语法来实现
+Function.prototype.call2 = function(context) {
+  context = context || window;
+  // 如果外面使用 call(null) 来进行绑定，那就默认绑定到 window 上
+  context.fn = this; 
+  // 这里使用的 fn 来存放绑定函数，实际中应该使用的不易重复的名字来表示的
+  var args = [];
+  for (var i = 1; i < arguments.length; i++) {
+    args.push('arguments[' + i + ']');
+  }
+  var result = eval('context.fn(' + args + ')');
+  delete context.fn;
+  return result;
+}
+```
+
+### apply 模拟实现
+
+```
+Function.prototype.apply2 = function(context, arr) {
+  context = context || window;
+  context.fn = this;
+  var result;
+  if (!arr) {
+    return context.fn();
+  } else {
+    var args = [];
+    for (var i = 1; i < arr.length; i++) {
+      args.push('arr[' + i + ']');
+    }
+    result = eval('context.fn(' + args + ')');
+  }
+
+  delete context.fn;
+  return result;
+}
+```
+
+
+
+ 
 
 
 
