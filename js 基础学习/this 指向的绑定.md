@@ -248,6 +248,25 @@ console.log(bar.prototype)
 // 这段代码中，如果源生的 bind 绑定对象后返回的包装函数的原型是 undefined，而 mdn 实现的 bind 方法返回的是 foo 的实例
 ```
 
+## 箭头函数
+
+箭头函数中没有 this，所以箭头函数中使用的 this 是定义箭头函数时函数所在作用域的 this，后面调用箭头函数时都无法再修改 this（闭包），展示代码如下：
+
+```
+var obj = {
+	a: 1,
+  foo: () => {
+    console.log(this)
+  }
+}
+var a = 0;
+
+obj.foo()
+// 这里将打印 window 对象，因为在开始定义的时候本作用域中的 this 指向的是 window 对象
+```
+
+
+
 
 
 
