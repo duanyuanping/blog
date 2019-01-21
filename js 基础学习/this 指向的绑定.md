@@ -220,10 +220,10 @@ if (!Function.prototype.bind) {
     var fNOP = function() {};
     var fBound = function() {
       return fToBind.apply(
-      	this instanceof fNOP && oThis ? this : oThis
+      	this instanceof fNOP && oThis ? this : oThis,
       	// 这里判断绑定函数调用的方式，来确定 this 指向什么对象
-      ),
-      aArgs.concat(Array.prototype.slice.call(arguments));
+     	aArgs.concat(Array.prototype.slice.call(arguments));
+      )
     };
     
     fNOP.prototype = this.prototype;
@@ -246,11 +246,46 @@ function foo() {}
 var bar = foo.bind(obj)
 console.log(bar.prototype)
 // 这段代码中，如果源生的 bind 绑定对象后返回的包装函数的原型是 undefined，而 mdn 实现的 bind 方法返回的是 foo 的实例
+console.log(new bar().__proto__)
+// 源生打印出来的是 foo.prototype，mdn 例子中因为 fBound.prototype = new fNOP(); 的原因，打印出来的是构造函数为 foo 的实例
+```
+
+思考：
+
+```
+if (!Function.prototype.bind) {
+  Function.prototype.bind = function(oThis) {
+    if (typeof this !== 'function') {
+      throw new TypeError(
+        "..." +
+        "..."
+      );
+    }
+    
+    var aArgs = Array.prototype.slice.call(arguments, 1);
+    var fToBind = this;
+    var fNOP = function() {};
+    var fBound = function() {
+      // 由于下面将 fBOund 的原型链设置成 undefined 了，所以要考虑如何判断是否是实例操作调用此函数，es6 中提供了一个 api 为 new.target 可以用来判断，但是 bind 在 new.target 就支持了，所以这种也行不通。
+      if (new.target === fBound) {
+        this.__proto__ = fToBind.prototype;
+      }  
+      return fToBind.apply(
+      	// this instanceof fNOP && oThis ? this : oThis,
+      	new.target === fBound ? this : oThis,
+     	aArgs.concat(Array.prototype.slice.call(arguments));
+      )
+    };
+    
+    fBound.prototype = undefined;
+    return fBound;
+  }
+}
 ```
 
 ## 箭头函数
 
-箭头函数中没有 this，所以箭头函数中使用的 this 是定义箭头函数时函数所在作用域的 this，后面调用箭头函数时都无法再修改 this（闭包），展示代码如下：
+箭头函数并不是绑定了this，箭头函数内部是没有 this，所以箭头函数中使用的 this 是定义箭头函数时函数所在作用域的 this，后面调用箭头函数时都无法再修改 this（闭包），展示代码如下：
 
 ```
 var obj = {

@@ -2,7 +2,7 @@
 
 ## 简述
 
-fetch api 使用来替换现有的 XHR 来实现前端网络请求，这样我们在不用加载任何插件或者封装 ajax 请求对象的情况下，就能够完成网络请求。并且调用 fetch 函数会在请求返回结果时返回一个 promise 对象，所以我们可以尽情的使用 es6 的 promise 语法来完成网络请求。
+fetch api 使用来替换现有的 XHR 来实现前端网络请求，这样我们在不用加载任何插件或者封装 ajax 请求对象的情况下，就能够完成网络请求。并且调用 fetch 函数会在请求返回结果时返回一个 promise 对象，我们可以使用 es6/7 中的 Promise、generator/yield、async/await 来读取网络请求的结果。
 
 ## 注意
 
@@ -34,6 +34,22 @@ fetch('http://localhost:7010/api/login', {
 .then(data => {
   console.log(data)
 })
+```
+
+async/await 用法：
+
+```
+// 使用 async 处理异步，如果 fetch 返回的 promise 的状态是 reject 就会被外部的 catch 捕捉
+async test() {
+  try {
+    const headers = new Headers({...});
+    const res = await fetch(url, {...});
+    const data = await res.json();
+    console.log(data);
+  } catch (err) {
+    console.log(`请求出错：${err}`);
+  }
+}
 ```
 
 ## Headers 

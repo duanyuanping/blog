@@ -126,20 +126,13 @@ console.log(newObj);
 
 ```
 // 判断对象的具体类型
-const isType = (obj, type) => {
-  if (typeof obj !== 'object') return false;
+const _instanceof = (obj, type) => {
+  if (obj === null || typeof obj !== 'object') {
+    return false;
+  }
 
-  const typeString = Object.prototype.toString.call(obj);
-  const conditions = {
-    Array: typeString === '[object Array]',
-    Date: typeString === '[object Date]',
-    RegExp: typeString === '[object RegExp]',
-    Set: typeString === '[object Set]',
-    Map: typeString === '[object Map]',
-  };
-  
-  return conditions.hasOwnProperty(type) && conditions[type];
-};
+  return obj instanceof type;
+}
 
 const clone = parent => {
 	// 这里我们将会把已经克隆过得对象直接放到 parents 和 children 这两个数组中，以便后面检测是否循环引用时使用
@@ -158,12 +151,19 @@ const clone = parent => {
     
     let child, proto;
     const conditions = [
-      [isType(parent, 'Array'), () => []],
-      [isType(parent, 'RegExp'),() => new RegExp(parent)],
-      [isType(parent, 'Date'), () => new Date(parent.getTime())],
-      [isType(parent, 'Set'),() => new Set(parent)],
-      [isType(parent, 'Map'),() => new Map(parent)],
-      // default
+      [_instanceof(parent, Array), () => []],
+      [_instanceof(parent, Date), () => new Date(parent)],
+      [_instanceof(parent, Set), () => new Set(parent)],
+      [_instanceof(parent, Map), () => new Map(parent)],
+      [_instanceof(parent, Promise), () => new Promise((res, rej) => {
+          parent.then(
+            val => {
+              res(_clone(val))
+            },
+            err => rej(_clone(val)),
+          )
+        })
+      ],
       [true, () => {
         proto = Object.getPrototypeOf(parent);
         return Object.create(proto);
@@ -211,7 +211,8 @@ const oldObj = {
   c: new RegExp('ab+c', 'i'),
   d: Messi,
   e: new Set([1, 2]),
-  f: new Map([[[], 1]])
+  f: new Map([[[], 1]]),
+  p: Promise.resolve({name: duan})
 };
 oldObj.b = oldObj;
 
