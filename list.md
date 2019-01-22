@@ -99,6 +99,10 @@ this
 
 ## web 安全
 
+- XSS
+- CSRF
+- CORB
+
 ## 技术大类认识
 
 - spa
