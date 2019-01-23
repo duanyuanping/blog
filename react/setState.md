@@ -94,6 +94,12 @@ render() {
 ...
 ```
 
+1. 在组件生命周期中或者react事件绑定中，setState是通过异步更新的。 
+
+2. 在延时的回调或者原生事件绑定的回调中调用setState不一定是异步的。
+
+
+
 [react 中的 setState 技术内幕](https://github.com/MrErHu/blog/issues/20)
 
 [React中setState真的是异步的吗](https://juejin.im/post/5ac1aaad6fb9a028d444bb87)
