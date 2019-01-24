@@ -40,7 +40,7 @@ this
 同步解决方法
 
 - 同步和异步的区别（结合 event loop）
-- Promise（需要了解实现）
+- 【√】Promise（需要了解实现）
 - Generator（需要了解实现）
 - async await（需要了解实现）
 
@@ -48,7 +48,7 @@ this
 
 - ajax
 - 【√】fetch
-- 【√】跨域
+- 跨域（待补充后端解决跨域）
 
 模块
 
@@ -72,15 +72,16 @@ this
 ## html
 
 - 图片懒加载
-- 怎么表示 html 版本的
+- 【√】怎么表示 html 版本的
 
 ## css
 
-- flex
+- 【√】flex
 - 硬件加速
-- 垂直居中
-- 盒子模型
-- box-sizing
+- 【√】垂直居中
+- 【√】盒子模型
+- 【√】box-sizing
+- 【√】伪类和伪元素
 
 ## 浏览器
 
@@ -89,7 +90,7 @@ this
 - 进程和线程
 - Event loop
 - 渲染机制
-- 资源缓存
+- 【√】资源缓存
 - sessionStorage、LocalStorage、cookie、indexDB
 - Service workers
 
@@ -176,6 +177,8 @@ this
 - 从浏览器地址栏输入 url 到显示页面所经历的过程
 
 ## 项目或学习生活中遇到的问题
+
+
 
 ## 项目整理
 
