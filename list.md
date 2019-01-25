@@ -36,6 +36,7 @@ this
 - 继承的多种方式以及优缺点
 - 【√】深浅拷贝
 - Proxy
+- 实现继承
 
 同步解决方法
 
@@ -57,39 +58,58 @@ this
 计时
 
 - 【√】setTimeout、setInterval、requestAnimationFrame
+- setTimeout 实现 setInterval
+
+事件
+
+- 事件流
+- 事件委托
 
 其他
 
 - 防抖
 - 节流
+- 用过哪些设计模式
+- 渲染 100 万条数据，页面不卡顿（使用 webWorker、将数据分段操作）
+- 实现 sleep 效果
+- webworker
 
 实操
 
 - 事件处理
 - 窗口大小以及滚动条
 - 数组和字符串的一些操作方法
+- 数组降维
 
 ## html
 
 - 图片懒加载
 - 【√】怎么表示 html 版本的
+- script 中的 defer 和 async【可以在总结页面渲染的时候写】
 
 ## css
 
 - 【√】flex
-- 硬件加速
+- 【√】硬件加速
 - 【√】垂直居中
 - 【√】盒子模型
 - 【√】box-sizing
 - 【√】伪类和伪元素
+- link 和 @import 区别
+- BFC（双边距重叠问题）、IFC
+- 几种常见的布局（圣杯、双飞翼）
+- less、sass、scss
+- 如何实现字体小于 12px
+- 画 0.5px 的线条
+- transition 和 animation 区别
 
 ## 浏览器
 
 [从浏览器多进程到JS单线程，JS运行机制最全面的一次梳理](https://juejin.im/post/5a6547d0f265da3e283a1df7)
 
-- 进程和线程
+- 【√】进程和线程
 - Event loop
-- 渲染机制
+- 【√】渲染机制
 - 【√】资源缓存
 - sessionStorage、LocalStorage、cookie、indexDB
 - Service workers
@@ -162,7 +182,11 @@ this
 - dns 解析域名
 - http2 和 http1 有什么不一样的
 - https 解决了 http 上的什么问题
+- https 加密
 - ssl 握手
+- websocket
+- http 规范没有规定 get 和 post 请求体最大多少
+- http 请求报文结构
 
 ## 数据库
 

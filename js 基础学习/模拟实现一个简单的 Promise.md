@@ -1,4 +1,6 @@
 ```
+// 模拟实现了 resolve、reject、then、catch 方法
+
 function Promise(executor) {
 	if (typeof executor !== 'function') {
 		throw Error('实例 Promise 对象操作错误');
