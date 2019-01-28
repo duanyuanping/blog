@@ -85,7 +85,7 @@ this
 
 - 图片懒加载
 - 【√】怎么表示 html 版本的
-- script 中的 defer 和 async【可以在总结页面渲染的时候写】
+- 【√】script 中的 defer 和 async【可以在总结页面渲染的时候写】
 
 ## css
 
@@ -108,7 +108,7 @@ this
 [从浏览器多进程到JS单线程，JS运行机制最全面的一次梳理](https://juejin.im/post/5a6547d0f265da3e283a1df7)
 
 - 【√】进程和线程
-- Event loop
+- 【√】Event loop
 - 【√】渲染机制
 - 【√】资源缓存
 - sessionStorage、LocalStorage、cookie、indexDB
