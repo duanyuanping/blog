@@ -266,7 +266,7 @@ if (!Function.prototype.bind) {
     var fToBind = this;
     var fNOP = function() {};
     var fBound = function() {
-      // 由于下面将 fBOund 的原型链设置成 undefined 了，所以要考虑如何判断是否是实例操作调用此函数，es6 中提供了一个 api 为 new.target 可以用来判断，但是 bind 在 new.target 就支持了，所以这种也行不通。
+      // 由于下面将 fBOund 的原型链设置成 undefined 了，所以要考虑如何判断是否是实例操作调用此函数，es6 中提供了一个 api 为 new.target 可以用来判断，但是 bind 在 new.target 之前就支持了，所以这种也行不通。
       if (new.target === fBound) {
         this.__proto__ = fToBind.prototype;
       }  

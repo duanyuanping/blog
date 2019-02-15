@@ -26,11 +26,9 @@ ie8 及其以下版本浏览器在文档中不写 DOCTYPE 就会使用 IE 盒子
 
 一、
 
-表单、普通按钮和提交按钮想要宽度都占满父容器，设置 `width: 100%;` 
+对于表单元素中的 input、textarea 这两个元素，如果想要让这个两个元素横向铺满整个父容器，我们设置 `display: block;` 是没有用的，我们能做的就是使用 `width: 100%;` ，这样我们就有一个问题就是，这两个元素本身是由 border 的，所以他们宽度会超出父容器，因此我们这里设置他们 `box-sizing: border-box;`
 
 ![运用场景一](http://testduan.oss-cn-beijing.aliyuncs.com/blog-img/box-sizing%E5%9C%BA%E6%99%AF%E4%B8%80.jpg)
-
-表单盒子默认是 content-box，而按钮和提交按钮默认是 border-box，因此这里离我们将表单元素设置 `box-sizing: border-box;`
 
 二、
 
