@@ -117,6 +117,7 @@ this
 - 【√】资源缓存
 - sessionStorage、LocalStorage、cookie、indexDB
 - Service workers
+- 垃圾回收机制
 
 ## 性能
 
@@ -142,16 +143,18 @@ this
 - 【√】什么是 jsx，浏览器怎么识别 jsx
 - 【√】为什么要用 virtual dom
 - 【√】Component 和 PureComponent 区别
-- 非父子组件通信
+- 【√】非父子组件通信
 - 【√】react 生命周期
-- key 有什么用
+- 【√】key 有什么用
 - 【√】setState 传参，以及调用时页面更新问题
-- refs 作用
+- 【√】refs 作用
 - 【√】react16 的 fiber 是什么
-- react 事件
-- 事件绑定 this 的方式以及优缺点
-- 虚拟 dom 是怎么实现的，为什么说虚拟 dom 操作能够提高性能
+- 【√】react 事件
+- 【√】事件绑定 this 的方式以及优缺点
+- 写一个 antDesign 组件
+- react hooks
 - 了解到的 react 最近有什么更新
+- 数据监测 prop-type
 
 [学习地址一](https://juejin.im/post/5bca74cfe51d450e9163351b)
 
