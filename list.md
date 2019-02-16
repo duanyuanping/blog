@@ -18,13 +18,13 @@
 
 作用域
 
-- 词法作用域和动态作用域
+- 【√】词法作用域和动态作用域
 - 作用域链和闭包
-- AO（活动对象，和 VO 指向同一个对象）、VO（变量对象）
+- 【√】AO（活动对象，和 VO 指向同一个对象）、VO（变量对象）
 
 this
 
-- 执行上下文和执行栈
+- 【√】执行上下文和执行栈
 - 【√】4 种 this 绑定
 - 【√】箭头函数的 this
 - 【√】call、apply、bind 原理以及是实现
@@ -139,17 +139,16 @@ this
 ## react
 
 - 简单介绍什么是 react
-- 什么是 jsx，浏览器怎么识别 jsx
+- 【√】什么是 jsx，浏览器怎么识别 jsx
 - 【√】为什么要用 virtual dom
-- Component 和 PureComponent 区别
-- 状态提升概念，如何跨级级组件中传参（context）
-- react 生态
+- 【√】Component 和 PureComponent 区别
+- 非父子组件通信
+- 【√】react 生命周期
 - key 有什么用
-- setState 传参，以及调用时页面更新问题
+- 【√】setState 传参，以及调用时页面更新问题
 - refs 作用
-- react16 的 fiber 框架是什么
-- v16.3 前后的生命周期有什么变化，一般请求数据会放在哪个生命周期中
-- react 事件监听是怎么实现的
+- 【√】react16 的 fiber 是什么
+- react 事件
 - 事件绑定 this 的方式以及优缺点
 - 虚拟 dom 是怎么实现的，为什么说虚拟 dom 操作能够提高性能
 - 了解到的 react 最近有什么更新

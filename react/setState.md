@@ -45,7 +45,7 @@ componentDidMount() {
 }
 ```
 
-实际中调用 addValue 函数后，state 的值并不会变为 2 [原因：当 componentDidMount 中调用 setState 时，控制是否马上更新的 isBatchingUpdates 参数值为 true 表示现在正在执行更新组件操作，所以此时调用 setState 只能够将新的 state 放入 dirtyComponent 队列中，等到 isBatchingUpdates 为 false（即 batchedUpdates 事务 close 阶段） 的时候才来更新 dirtyComponent 队列中的 state]
+实际中调用 addValue 函数后，state 的值并不会变为 2 [原因：当 componentDidMount 中调用 setState 时，控制是否马上更新的 isBatchingUpdates 参数值为 true 表示现在正在执行更新组件操作（处于 react的生命周期中），所以此时调用 setState 只能够将新的 state 放入 dirtyComponent 队列中，等到 isBatchingUpdates 为 false（即 batchedUpdates 事务 close 阶段） 的时候才来更新 dirtyComponent 队列中的 state]
 
 想要变成 2 ，可以有以下两种方法：
 
@@ -79,7 +79,7 @@ componentDidMount() {
 
 在 componentDidMount 中异步调用 setState，这样就可以在 isBatchingUpdates 为 false 时调用 setState 来对组件进行更新。
 
-还有就是事件合成也是会调用 batchedUpdates 函数（前面也是调用这个函数去修改 isBatchingUpdates 的值得），这个函数内部会修改 isBatchingUpdates 成 true，所以下面修改 state 也会是异步的：
+还有就是事件合成也是会调用 batchedUpdates 函数（前面也是调用这个函数去修改 isBatchingUpdates 的值），这个函数内部会修改 isBatchingUpdates 成 true，所以下面修改 state 也会是异步的：
 
 ```
 // value 初始值为 0
