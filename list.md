@@ -153,7 +153,8 @@ this
 - 【√】事件绑定 this 的方式以及优缺点
 - 写一个 antDesign 组件
 - react hooks
-- 了解到的 react 最近有什么更新
+- 了解到的 react 最近有什么更
+- 新
 - 数据监测 prop-type
 
 [学习地址一](https://juejin.im/post/5bca74cfe51d450e9163351b)
