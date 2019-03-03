@@ -220,7 +220,7 @@ if (!Function.prototype.bind) {
     var fNOP = function() {};
     var fBound = function() {
       return fToBind.apply(
-      	this instanceof fNOP && oThis ? this : oThis,
+      	this instanceof fNOP ? this : oThis,
       	// 这里判断绑定函数调用的方式，来确定 this 指向什么对象
      	aArgs.concat(Array.prototype.slice.call(arguments));
       )

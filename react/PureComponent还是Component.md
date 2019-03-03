@@ -6,7 +6,7 @@ PureComponent 通过浅比较 state 对象和 props 对象中的属性值是否�
 
 ## 基本类型数据
 
-在下面这段代码中除了第一次打印的 render 外，我们不管怎么点击按钮都只会打印一次 render 字符串。如果我们把 PureComponent 改成 Component 后，我们每次按钮，控制台都会打印出 render。
+在下面这段代码中除了第一次打印的 render 外，我们不管怎么点击按钮都只会打印一次 render 字符串，这里由于一直将 bol 设置成 true 在第二次及其之后 bol 的值就一直没有。如果我们把 PureComponent 改成 Component 后，我们每次按钮，控制台都会打印出 render。
 
 ```
 import React, { PureComponent, Component } from 'react';

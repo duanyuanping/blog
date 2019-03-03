@@ -1,3 +1,5 @@
+下面是模拟实现 redux-thunk 库
+
 ```
 function createThunkMiddleware(extraArgument) {
   return ({ dispatch, getState }) => next => action => {
