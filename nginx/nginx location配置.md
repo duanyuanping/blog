@@ -4,10 +4,10 @@
 
 location路由匹配的大致规则：`location [=|^~|~|~*|@] path { ... }`
 
-### =
+### 精确匹配（=）
 
 location配置的path和客户端请求的path完全一致时匹配成功。
-匹配成功后，nginx就会停止判断其他匹配。
+匹配成功后，nginx就会停止搜索其他匹配项。
 
 ```
 server {
@@ -23,9 +23,9 @@ server {
 - 请求`location:2020/test/`，匹配失败，响应状态码404
 - 请求`location:2020/test/1`，匹配失败，响应状态码404
 
-### ^~
+### 前缀匹配（^~）
 
-location配置的path是客户端请求的path前缀时匹配成功。
+location配置的path为客户端请求的path前缀时匹配成功。
 匹配成功后，nginx还会判断是否存在后面这种情况（location修饰符为`^~` && location配置的path是客户端请求的前缀），如果存在，就使用location配置的path路径最长的作为最后的匹配结果。
 
 ```
@@ -59,6 +59,14 @@ server {
 - 请求`localhost:2020/tes`，响应内容"/test"
 - 请求`localhost:2020/test/1`，这里两个location配置都匹配上了，第一个location配置的path路径长度为1小于第二个location配置的path路径长度2，所以响应内容"/test/1"
 
+### 正则匹配（~和~*）
+
+修饰符`~`，正则匹配区分大小写。修饰符`~*`，正则匹配不区分大小写。
+正则匹配以location在文件中的定义顺序从上到下进行匹配。匹配成功以后，nginx就停止搜索其他匹配项。
+
+```
+
+```
 
 
 
