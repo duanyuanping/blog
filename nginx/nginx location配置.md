@@ -22,10 +22,10 @@ server {
   }
 }
 ```
-- 请求`location:2020/test`，匹配成功，响应内容为"="
-- 请求`location:2020/test?num=1`，匹配成功，响应内容为"="
-- 请求`location:2020/test/`，匹配失败，响应状态码404
-- 请求`location:2020/test/1`，匹配失败，响应状态码404
+- 请求`localhost:2020/test`，匹配成功，响应内容为"="
+- 请求`localhost:2020/test?num=1`，匹配成功，响应内容为"="
+- 请求`localhost:2020/test/`，匹配失败，响应状态码404
+- 请求`localhost:2020/test/1`，匹配失败，响应状态码404
 
 ### 前缀匹配（^~）
 
@@ -44,7 +44,7 @@ server {
 - 请求`localhost:2020/test`，匹配成功，响应内容"^~"
 - 请求`localhost:2020/test/1`，匹配成功，响应内容"^~"
 - 请求`localhost:2020/test111`，匹配成功，响应内容"^~"
-- 请求`location:2020/tes`，匹配失败，响应状态码404
+- 请求`localhost:2020/tes`，匹配失败，响应状态码404
 
 ```
 server {
@@ -120,7 +120,7 @@ server {
   }
 }
 ```
-- 请求`location:2020/test_a`，匹配成功，响应内容"="，精确匹配优先级比前缀匹配优先级大
+- 请求`localhost:2020/test_a`，匹配成功，响应内容"="，精确匹配优先级比前缀匹配优先级大
 
 ---
 
@@ -137,7 +137,7 @@ server {
   }
 }
 ```
-- 请求`location:2020/test_a`，匹配成功，响应内容"^~"，前缀匹配优先级比正则匹配优先级大
+- 请求`localhost:2020/test_a`，匹配成功，响应内容"^~"，前缀匹配优先级比正则匹配优先级大
 
 ---
 
@@ -154,7 +154,7 @@ server {
   }
 }
 ```
-- 请求`location:2020/test_a`，匹配成功，响应内容"~"，正则匹配优先级比通配符优先级大
+- 请求`localhost:2020/test_a`，匹配成功，响应内容"~"，正则匹配优先级比通配符优先级大
 
 ### 优先级疑惑点
 ```
@@ -170,7 +170,7 @@ server {
   }
 }
 ```
-- 请求`location:2020/test/a`，匹配成功，响应内容"null"，可以知道第二个location配置优先级比前缀优先级大，这个在前面[前缀匹配](#前缀匹配（^~）)有介绍。
+- 请求`localhost:2020/test/a`，匹配成功，响应内容"null"，可以知道第二个location配置优先级比前缀优先级大，这个在前面[前缀匹配](#前缀匹配（^~）)有介绍。
 
 ---
 
@@ -209,4 +209,139 @@ server {
   }
 }
 ```
-- 请求`location:2020/test/a`，匹配成功，响应内容"~"（what？为什么返回的不是"null"），这里三个都匹配上了，但是nginx选用的是正则匹配结果，这个我不知道是什么原因，如果有大佬知道原因，还请大佬帮忙解惑。
+- 请求`localhost:2020/test/a`，匹配成功，响应内容"~"（what？为什么返回的不是"null"），这里三个都匹配上了，但是nginx选用的是正则匹配结果，这个我不知道是什么原因，如果有大佬知道原因，还请大佬帮忙解惑。
+
+## location常用的参数
+
+### root & alias
+
+两个参数都是用来指定文件路径。
+
+>注：之前很多文章都表示alias配置的路径最后必须加上"/"，这个到现在已经不适用了。我测试的时候，alias配置的路径最后不添加"/"，一样可以正常使用。
+
+#### 最终指向的文件路径区别
+- root指向的文件实际路径：root+location
+- alias指向的文件实际路径：alias
+
+```
+server {
+  listen 2020;
+  
+  location /test {
+    root /data;
+  }
+}
+```
+最终指向的文件路径为`/data/test`。
+
+```
+server {
+  listen 2020;
+  
+  location /test {
+    alias /data;
+  }
+}
+```
+最终指向的文件路径为`/data`;
+
+使用上面的配置，我们发起请求`localhost:2020/test/1.png`。
+- root配置，该请求查找的文件路径为`/data/test/1.png`
+- alias配置，该请求查找的文件路径为`/data/1.png`
+
+#### 定义位置区别
+- root可以在http、server、location、if中定义内容
+- alias只能在location中定义
+
+root在http、server定义以后，location会默认继承上层定义的内容，可以在location中使用root对上层root定义进行重写，或者使用alias让上层root在该lcation中失效。
+
+#### 正则匹配时定义区别
+- root：按照前面说的方式使用
+- alias：需要将正则匹配的内容添加到alias定义的路径后面，具体的例子如下
+
+```
+server {
+  listen 2020;
+  
+  location ~ /test {
+    alias /data;
+  }
+}
+```
+请求`localhost:2020/test/1.png`，匹配成功，但是没有找到文件内容，响应404
+
+```
+server {
+  listen 2020;
+  
+  location ~ /test(.*)$ {
+    alias /data$1;
+  }
+}
+```
+请求`localhost:2020/test/1.png`，匹配成功，能够正常返回文件
+
+### proxy_pass
+
+该参数用作反向代理，可以用来做负载均衡、前端解决跨域等功能。使用结构`proxy_pass url`。
+
+关于proxy_pass实现负载均衡，可以在[nginx负载均衡](https://github.com/duanyuanping/Blog/issues/26)中看到相关内容。
+
+proxy_pass转发请求，配置的url最后是否有"/"，会呈现不同的效果。
+
+```
+server {
+  listen 2020;
+  
+  location /api/ {
+    proxy_pass http://localhost:7001;
+  }
+}
+```
+请求`localhost:2020/api/component/list`，nginx会将该请求代理转发到`http://locahost:7001/api/component/list`。
+
+```
+server {
+  listen 2020;
+  
+  location /api/ {
+    proxy_pass http://localhost:7001/;
+  }
+}
+```
+请求`localhost:2020/api/component/list`，nginx会将该请求代理转发到`http://locahost:7001/component/list`。
+
+---
+
+```
+server {
+  listen 2020;
+  
+  location /api/ {
+    proxy_pass http://localhost:7001/online;
+  }
+}
+```
+请求`localhost:2020/api/component/list`，nginx会将该请求代理转发到`http://locahost:7001/onlinecomponent/list`。
+
+```
+server {
+  listen 2020;
+  
+  location /api/ {
+    proxy_pass http://localhost:7001/online/;
+  }
+}
+```
+请求`localhost:2020/api/component/list`，nginx会将该请求代理转发到`http://locahost:7001/online/component/list`。
+
+### rewrite
+
+### try_files
+
+### index
+
+
+
+
+
