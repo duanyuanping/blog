@@ -298,7 +298,8 @@ server {
   }
 }
 ```
-请求`localhost:2020/api/component/list`，nginx会将该请求代理转发到`http://locahost:7001/api/component/list`。
+请求`localhost:2020/api/component/list`，nginx会将该请求代理转发到`http://locahost:7001/api/component/list`。  
+应用场景：前端请求存在跨域，后端接口格式是`api/业务路由`，前端请求的接口也是`api/业务路由`。
 
 ```
 server {
@@ -309,7 +310,8 @@ server {
   }
 }
 ```
-请求`localhost:2020/api/component/list`，nginx会将该请求代理转发到`http://locahost:7001/component/list`。
+请求`localhost:2020/api/component/list`，nginx会将该请求代理转发到`http://locahost:7001/component/list`。  
+应用场景：后端接口格式是`业务路由`，前端请求的接口是`api/业务路由`，前端请求的接口前面加一个"api"是为了标识某个后端服务，后端接口中并没用这个标识。
 
 ---
 
@@ -323,6 +325,7 @@ server {
 }
 ```
 请求`localhost:2020/api/component/list`，nginx会将该请求代理转发到`http://locahost:7001/onlinecomponent/list`。
+应用场景：没遇到这样的场景，一般都会用都会用"/"隔开路径。
 
 ```
 server {
@@ -337,9 +340,161 @@ server {
 
 ### rewrite
 
-### try_files
+rewrite参数用来将客户端请求重定向到一个新的地址。使用格式`rewrite regex replacement [flag];`
+- regex（必填）：正则匹配，只有正则匹配成功后，才能进行地址修改等后续步骤
+- replacement（必填）：新的url（以`http://` `https://` `$schema`等开头）或者uri，正则匹配成功后会用这个值替换原来的请求地址。当replacement值是url时，客户端请求发生重定向，因此会有两次请求，第一次请求是客户端原请求，响应的状态码为302，第二次请求的地址就是replacement值，本次rewrite逻辑运行完成以后，后续的rewrite不再匹配；当replacement值为uri时，客户端请求可能发生重定向，是否发生重定向与flag参数有关
+- flag（可选）
+  - break：本条rewrite逻辑运行完成以后，后续的rewrite不再匹配
+  - last：本条rewrite逻辑运行完成以后，后续的rewrite不再匹配，重新开始location路由匹配
+  - permanent：永久重定向，301
+  - redirect：临时重定向，302
+  
+下面展示几个例子：
+
+```
+server {
+  listen 2020;
+  
+  location / {
+    rewrite /(.*) https://www.$1.com;
+  }
+}
+```
+请求`localhost:2020/baidu`，请求被重定向到`https://www.baidu.com`。
+
+```
+server {
+  listen 2020;
+  
+  location / {
+    rewrite (.*) https://www.baidu.com;
+    rewrite (.*) https://www.github.com;
+  }
+}
+```
+请求`localhost:2020`，请求被重定向到`https://www.baidu.com`，查看network，里面有一条`http://localhost:2020/`请求，响应的状态码为302，还以一条`https://www.baidu.com/`请求。
+
+---
+
+```
+server {
+  listen 2020;
+  
+  location / {
+    rewrite (.*) /test redirect; # permanent也是可以的
+  }
+  
+  location /test {
+    return 200 'ok';
+  }
+}
+```
+请求`localhost:2020`，请求被重定向到`http://localhost:2020/test`，network中有两条请求分别是响应状态码302（flag值为permanent时，状态码为301）的`http://localhost:2020/`请求和响应状态码为200的`http://localhost:2020/test`请求。
+
+---
+
+flag值为break或last都会终止后续rewrite匹配（不会终止proxy_pass等逻辑），两者不同的点是，break不会发起一轮新的location路由匹配，而last会发起一轮新的location匹配。
+
+```
+server {
+  listen 2020;
+  
+  location /last {
+    rewrite /last(.*) /test1;
+    rewrite /test1(.*) /test2 last;
+    rewrite /test2(.*) /test3;
+  }
+  
+  location /break {
+    rewrite /break(.*) /test1;
+    rewrite /test1(.*) /test2 break;
+    rewrite /test2(.*) /test3;
+  }
+
+  location /test1 {
+    return 200 'test1';
+  }
+
+  location /test2 {
+    return 200 'test2';
+  }
+
+  location /test3 {
+    return 200 'test3';
+  }
+}
+```
+- 请求`localhost:2020/last`，响应内容"test2"。这个请求被`location /last {...}`匹配成功，因为`rewrite /test1(.*) /test2 last`这里flag为last，所以这条rewrite逻辑运行完以后，就会忽略后续的rewrite，然后重新location路由匹配，重新匹配时请求变成`http://localhost:2020/test2`，因此会被`location /test2 {}`这条location匹配，所以响应内容为"test2"。
+- 请求`localhost:2020/break`，响应状态码为404。这个请求被`location /break {...}`匹配成功，因为`rewrite /test1(.*) /test2 break`这里flag为break，所以这条rewrite逻辑运行完以后，就会忽略后续的rewrite，执行完当前location后还是没有找到资源文件，因此返回状态码"404"。
+
+将上面例子中`location /break {...}`这部分内容修改一下，修改成如下内容：
+```
+location /break {
+    rewrite /break(.*) /test1;
+    rewrite /test1(.*) /test2 break;
+    rewrite /test2(.*) /test3;
+    
+    proxy_pass http://localhost:2020;
+}
+```
+- 请求`localhost:2020/break`，响应内容"test2"，rewrite语句中flag值为break，不会影响proxy_pass语句，因此`localhost:2020/break`实际会代理转发到`localhost:2020/test2`这个地址。
+
+如果rewrite部分内容没有看懂，可以到[搞懂nginx的rewrite模块](https://segmentfault.com/a/1190000008102599)查看更详细的介绍。
 
 ### index
+
+index用于指定网站的起始页面，默认值`index index.html;`。
+
+index参数只是用来指定文件的路径，nginx根据index参数查找文件是否存在，如果存在就用文件路径拼接成新的url，nginx内部重定向到这个新的url，来获取到起始页面资源。下面用具体的例子来进行说明（/data/test目录下有一个index.html文件）：
+
+```
+server {
+  listen 2020;
+  
+  location / {
+    root /data/test;
+    index index.html;
+  }
+}
+```
+请求`localhost:2020`，响应内容为文件`/data/test/index.html`内容。
+
+下面对配置文件添加一些内容，用来匹配html文件请求：
+```
+server {
+  listen 2020;
+  
+  location / {
+    root /data/test;
+    index index.html;
+  }
+  
+  location ~ \.html$ {
+    return 200 'html文件请求拦截';
+  }
+}
+```
+请求`localhost:2020`，响应内容"html文件请求拦截"。这个例子很好的说明nginx内部会将初始页文件路径生成一个新的url，nginx内部重定向到这个新的url请求初始页文件。
+
+---
+
+index后面可以跟多个文件路径，当前一个文件不存在时，nginx会自动判断后面文件是否存在。下面使用一个例子来展示（/data/test目录下只有idnex.php文件）：
+
+```
+server {
+  listen 2020;
+  
+  location / {
+    root /data/test;
+    index index.html index.php;
+  }
+}
+```
+请求`localhost:2020`，nginx会首先判断文件`/data/test/index.html`是否存在，如果存在，就使用这个文件路径来生成新的文件url，然后nginx内部重定向到这个文件资源；如果不存在，就判断`/data/test/index.php`文件是否存在，如果不存在就返回403，如果存在，就使用这个文件路径来生成新的文件url，然后nginx内部重定向到这个文件资源。
+
+### try_files
+
+
 
 
 
