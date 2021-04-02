@@ -1,21 +1,20 @@
-const MyPromise = require('./promise');
+const MyPromise = require('./MyPromise.js')
 
-const promise = new MyPromise((resolve, reject) => {
-  setTimeout(() => {
-    resolve('reject')
-  }, 2000); 
+MyPromise.resolve().then(() => {
+  console.log(0);
+  return MyPromise.resolve(4);
+}).then((res) => {
+  console.log(res)
 })
 
-promise
-  .then(
-    value => {
-    console.log(1)
-    console.log('resolve', value)
-    return 'test'
-  },
-  reason => {
-    console.log('then1', reason);
-
-    throw new Error('11111')
-  }
-  )
+MyPromise.resolve().then(() => {
+  console.log(1);
+}).then(() => {
+  console.log(2);
+}).then(() => {
+  console.log(3);
+}).then(() => {
+  console.log(5);
+}).then(() =>{
+  console.log(6);
+})
