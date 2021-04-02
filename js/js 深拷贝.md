@@ -25,9 +25,8 @@ console.log(newObj.b); // { title: "word" }
 // 这里 newObj 对象中的 b 属性也改变的原因是 oldObj.b 和 newObj.b 指向的是同一个对象
 ```
 
-## JSON.parse、JSON.stringify
-
-该方法是先使用 JSON.stirngify 将对象转换成 json 字符串，JSON.parse 将 json 字符串转换成 json 对象，如下：
+## JSON.parse & JSON.stringify
+将对象序列化和反序列化，如下：
 
 ```
 const oldObj = {
@@ -124,71 +123,85 @@ console.log(newObj);
 
 这里我们使用递归来解决上面深克隆方法的部分不足（下面将不展示函数和 Promise 对象的深克隆）。
 
-```
-// 判断对象的具体类型
-const _instanceof = (obj, type) => {
-  if (obj === null || typeof obj !== 'object') {
-    return false;
+```js
+const isType = (obj, type) => {
+  if (typeof obj !== 'object') return false;
+  const typeString = Object.prototype.toString.call(obj);
+  let flag;
+
+  switch (type) {
+    case 'Array':
+      flag = typeString === '[object Array]';
+      break;
+    case 'Date':
+      flag = typeString === '[object Date]';
+      break;
+    case 'RegExp':
+      flag = typeString === '[object RegExp]';
+      break;
+    case 'Set':
+      flag = typeString === '[object Set]';
+      break;
+    case 'Map':
+      flag = typeString === '[object Map]';
+    default:
+      flag = false;
   }
+  return flag;
+};
 
-  return obj instanceof type;
-}
+const getRegExp = re => {
+  var flags = '';
+  if (re.global) flags += 'g';
+  if (re.ignoreCase) flags += 'i';
+  if (re.multiline) flags += 'm';
+  return flags;
+};
 
-const clone = parent => {
-	// 这里我们将会把已经克隆过得对象直接放到 parents 和 children 这两个数组中，以便后面检测是否循环引用时使用
+function cloneDepth(object) {
   const parents = [];
   const children = [];
-  
-  const _clone = parent => {
-    if (parent === null) return null;
+
+  function _clone(parent) {
+    if (parent === null) return parent;
     if (typeof parent !== 'object') return parent;
     
-    // 判断此次克隆的对象是循环调用？是，将前面存放的克隆好了的对象返回；不是，继续克隆此对象
-    const index = parents.indexOf(parent);
-    if (index !== -1) {
-      return children[index];
+    let child;
+    // 处理各种特殊数据
+    if (isType(parent, 'Array')){
+      child = [];
+    } else if (isType(parent, 'Date')) {
+      child = new Date(parent.now());
+    } else if (isType(parent, 'RegExp')) {
+      child = new RegExp(parent.source, getRegExp(parent))
+    } else if (isType(parent, 'Map')) {
+      child = new Map(parent);
+    } else if (isType(parent, 'Set')) {
+      child = new Set(parent);
+    } else {
+      proto = Object.getPrototypeOf(parent);
+      child = Object.create(proto);
     }
-    
-    let child, proto;
-    const conditions = [
-      [_instanceof(parent, Array), () => []],
-      [_instanceof(parent, Date), () => new Date(parent)],
-      [_instanceof(parent, Set), () => new Set(parent)],
-      [_instanceof(parent, Map), () => new Map(parent)],
-      [_instanceof(parent, Promise), () => new Promise((res, rej) => {
-          parent.then(
-            val => {
-              res(_clone(val))
-            },
-            err => rej(_clone(val)),
-          )
-        })
-      ],
-      [true, () => {
-        proto = Object.getPrototypeOf(parent);
-        return Object.create(proto);
-      }]
-    ];
 
-    for (let [condition, cb] of conditions) {
-      if (condition) {
-        child = cb();
-        break;
-      }
-    }
-    
+    // 处理循环引用
+    const parentIndex = parents.indexOf(parent);
+    if (~parentIndex) {
+      return children[parentIndex];
+    };
+
     parents.push(parent);
     children.push(child);
-    
-    for (let [key, val] of Object.entries(parent)) {
-      child[key] = _clone(val);
+
+    for (let key of Object.keys(parent)) {
+      child[key] = _clone(parent[key]);
     }
-    
-    return child; 
+    return child;
   }
-  
-  return _clone(parent);
-};
+
+  return _clone(object);
+}
+
+module.exports = cloneDepth;
 ```
 
 借用学习的网站里面的栗子：
