@@ -352,3 +352,5 @@ MyPromise.resolve().then(() => {
 ```
 
 自己实现的`MyPromise`和原生实现的`Promise`执行结果有点不一样。这是因为原生中，then回调执行的时候，会生成一个微任务，如果then回调如果返回的是一个promise对象，就会重新生成一个微任务，调用该对象的then方法获取值，这样就生成了两个微任务。
+
+- [从一道让我失眠的 Promise 面试题开始，深入分析 Promise 实现细节](https://juejin.cn/post/6945319439772434469#heading-31)
