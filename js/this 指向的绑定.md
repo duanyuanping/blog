@@ -205,7 +205,7 @@ new bar();
 
 出现上面的原因是源生的 bind 在包装函数的时候，包装函数内部会对包装函数中的 this 进行判断，判断是否是使用 new 来新建的实例，下面是 mdn 提供的一个 bind 实现：
 
-```
+```js
 if (!Function.prototype.bind) {
   Function.prototype.bind = function(oThis) {
     if (typeof this !== 'function') {
@@ -218,18 +218,21 @@ if (!Function.prototype.bind) {
     var aArgs = Array.prototype.slice.call(arguments, 1);
     var fToBind = this;
     var fNOP = function() {};
+
     var fBound = function() {
       return fToBind.apply(
+        // 当前函数执行如果是通过new的形式执行的，那么this的原型链中就应该有fNOP.prototype原型
       	this instanceof fNOP ? this : oThis,
-      	// 这里判断绑定函数调用的方式，来确定 this 指向什么对象
-     	aArgs.concat(Array.prototype.slice.call(arguments));
+     	  aArgs.concat(Array.prototype.slice.call(arguments));
       )
     };
     
+    /**
+     * 下面三段代码和fBound.prototype = this.prototype差不多。下面这样写的主要是防止用户修改fBound.prototype的时候，修改到原函数的原型。
+     * 如果开发者修改 fBound.prototype.__proto__，也是能够修改到原函数的原型
+     */
     fNOP.prototype = this.prototype;
     fBound.prototype = new fNOP();
-    // 上面这两行代码为什么不直接使用（fBound.prototype = this.prototype）来替换呢？
-    // mdn 那样做的原因：一般为实例添加公共属性是添加到构造函数的原型上面，所以这里防止用户在为 fBound 函数原型添加新的属性的时候无意间修改绑定函数的 prototype（虽然像这样做了以后用户还是可以通过 fBound.prototype.__proto__ 修改到）
     
     return fBound;
   }
