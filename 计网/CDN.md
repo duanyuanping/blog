@@ -1,4 +1,5 @@
 ![](https://res-static.hc-cdn.cn/SEO/CDN%E8%8A%82%E7%82%B9%E6%97%A0%E7%BC%93%E5%AD%98%E5%9C%BA%E6%99%AF.jpg)
+（图片来源：https://www.huaweicloud.com/zhishi/cdn001.html）
 - 客户端通过www.example.com请求资源，向本地dns服务发起域名解析
 - 域名解析请求被发到通用dns服务器
 - 通用dns服务器发现当前域名CNAME到www.example.com.c.cdnhwc1.com
