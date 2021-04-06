@@ -48,8 +48,7 @@ http3使用底层使用udp协议，udp协议是面向包传递，一次不存在
 
 udp是不可靠传输协议，quic在udp基础上错了一些修改，使其拥有与tcp相似的可靠性，提供了数据包重传、拥塞控制、调整传输节奏等一些tcp中的特性。
 
-## https
-
+quic提供一种新的加密方式，使得使用quic进行握手只需要进行两次，而我们使用[https](https://github.com/duanyuanping/blog/blob/master/%E8%AE%A1%E7%BD%91/https.md)进行需要握手4次握手。
 
 - [如何优雅的谈论HTTP／1.0／1.1／2.0](https://www.jianshu.com/p/52d86558ca57)
 - [浅析HTTP/2的多路复用](https://segmentfault.com/a/1190000011172823)
