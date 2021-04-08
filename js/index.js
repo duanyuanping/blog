@@ -1,20 +1,3 @@
-const MyPromise = require('./MyPromise.js')
+const a = require('./test');
 
-MyPromise.resolve().then(() => {
-  console.log(0);
-  return MyPromise.resolve(4);
-}).then((res) => {
-  console.log(res)
-})
-
-MyPromise.resolve().then(() => {
-  console.log(1);
-}).then(() => {
-  console.log(2);
-}).then(() => {
-  console.log(3);
-}).then(() => {
-  console.log(5);
-}).then(() =>{
-  console.log(6);
-})
+setTimeout(() => a.catch(err => console.log('22', err.stack)))
