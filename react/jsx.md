@@ -1,5 +1,12 @@
-将 HTML 模板直接嵌入到 JS 代码里面，但是 JS 不支持这种包含 HTML 的语法，所以需要通过工具将 JSX 编译输出成 JS 代码才能使用。
+react中，我们可以像写react那样定义使用什么元素节点类型和传入的参数。但是js执行过程并不能识别jsx，因此项目中需要使用`@babel/preset-react`babel插件将项目中使用了jsx的地方改成js可以执行的语句。
+```js
+const title = <h1 className="title">Hello, world!</h1>;
 
-使用 jsx 时，我们需要使用 babel（@babel/preset-react） 来讲 jsx 代码转换成 js 代码，转换后的 jsx 会调用 React.createElement 函数，所以我们需要在每个组件文件中引入 React 组件。
-
-在 jsx 中我们需要将组件名首字母大写，而元素则需要小写，这样做目的是方便 babel 识别哪些是组件哪些是元素
+// jsx转义后
+const title = React.createElement(
+  'h1',
+  { className: 'title' },
+  'Hello, world!'
+);
+```
+正因为经过转义后的jsx会调用`React.createElement`，所以在存在jsx代码的页面中需要添加`import React from 'react';`代码。
