@@ -20,3 +20,78 @@ const memoizedCallback = useCallback(
 // 当a、b两个依赖更新的时候，memoizedCallback执行时，doSomething函数调用传入的参数也是最新的a，b
 ```
 - useMemo：返回传入函数执行返回的值（返回一个 memoized 值）。
+
+
+## 实现
+一下内容来源于文章[react hooks原理](https://github.com/brickspert/blog/issues/26)。
+```js
+let _state;
+let _deps;
+
+export function useState(initialValue) {
+  _state = _state || initialValue;
+
+  function setState(newValue) {
+    stateValue = newValue;
+    render(); // 重新执行函数组件
+  }
+    
+  return [initialValue, setState];
+}
+
+export function useEffect(callback, depArray) {
+  // useEffect是否有传入第二个值
+  const hasNoDeps = !depArray;
+  // _deps值是否有发生变化
+  const hasChangedDeps = _deps ? !depArray.every((v, i) => _deps[i] === v) : true;
+
+  // useEffect执行没有传入第二个值或者传入的列表值发生变化时，执行callback回调，并更新_deps缓存
+  if (hasNoDeps || hasChangedDeps) {
+    callback();
+    _deps = hasChangedDeps;
+  }
+}
+```
+上面代码实现，只能在一个函数组件中分别使用一次useState和useEffect。
+
+为了在同一个函数组件中多次调用相同的hooks API，这里我们使用数组来存放对应的值。
+
+```js
+let memoizedState = []; // hooks 存放在这个数组
+let cursor = 0; // 当前 memoizedState 下标
+
+function useState(initialValue) {
+  memoizedState[cursor] = memoizedState[cursor] || initialValue;
+
+  function setState(value) {
+    memoizedState[cursor] = value;
+    render(); // render中将cursor重置为0，然后重新执行函数组件
+  }
+
+  return [memoizedState[cursor++], setState];
+}
+
+export function useEffect(callback, depArray) {
+  const hasNoDeps = !depArray;
+  const deps = memoizedState[cursor];
+  const hasChangedDeps = deps ? !depArray.every((v, i) => deps[i] === v) : true;
+
+  if (hasNoDeps || hasChangedDeps) {
+    callback();
+    memoizedState[cursor] = depArray;
+  }
+  cursor++;
+}
+```
+
+1. 初始化  
+![](https://user-images.githubusercontent.com/12526493/56090138-6871ae80-5ed0-11e9-8ffe-2056411a19d3.png)
+2. 初次渲染  
+![](https://user-images.githubusercontent.com/12526493/56090141-71628000-5ed0-11e9-9ac9-3a766be35941.png)
+3. 事件触发  
+![](https://user-images.githubusercontent.com/12526493/56090143-745d7080-5ed0-11e9-8d05-c66053a15b63.png)
+4. Re Render  
+![](https://user-images.githubusercontent.com/12526493/56090147-78898e00-5ed0-11e9-8b8c-8768c7651044.png)
+## hooks使用问题
+- 为什么只能在函数最外层调用 Hook？为什么不要在循环、条件判断或者子函数中调用？
+hooks API中将按照hoos调用顺序，将值存放在数组中，hooks调用顺序发生改变，memoizedState并不能感知到。
