@@ -1,3 +1,4 @@
+## https连接过程
 ![](https://img-blog.csdnimg.cn/20190825205936881.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2Fsenp3,size_16,color_FFFFFF,t_70)
 
 - 客户端向服务端发起https连接
@@ -11,7 +12,8 @@
 - 客户端发送请求，并将请求内容使用对称密钥进行加密
 - 服务端使用对称密钥将请求解密，然后进行后续的业务处理
 
-上面流程中有使用到CA证书，这里介绍下证书获取流程
+## SSL证书获取
+上面流程中有使用到SSL证书（CA证书），这里介绍下证书获取流程
 ![](https://img-blog.csdnimg.cn/20190825210112772.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2Fsenp3,size_16,color_FFFFFF,t_70)
 - 服务器将本地的公钥发送给权威认证机构
 - 权威认证机构制作数字证书（办法机构、有效期、公钥等信息），返还给服务端
@@ -19,6 +21,9 @@
 - 服务端将SSL证书（CA证书）响应给客户端
 
 域名服务提供商一般都会提供SSL证书（CA证书）申请，我们建站时，先生成一对公私钥，然后带着刚生成的公钥，使用域名服务商提供的SSL证书（CA证书）申请页面进行申请证书。
+
+## SSL证书校验
+校验是在本地完成的，不需要联网交互。浏览器和操作系统中内置了CA根证书和相应的公钥，服务端证书是CA机构私钥加密得到的，客户端使用内置的公钥对CA证书的指纹进行解密获取hash，然后在对证书明文进行hash计算，然后再比对这两个hash值是否一样，就可以直到当前CA证书是否被篡改。
 
 学习地址：
 - [分分钟让你理解HTTPS](https://juejin.im/post/5ad6ad575188255c272273c4)
