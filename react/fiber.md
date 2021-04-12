@@ -28,6 +28,10 @@ react将diff和渲染工作分成了两个阶段（之前diff和渲染是一块�
 
 >注意：每个节点都有workInProgress tree
 
+react组件每次需要更新时，该组件对应的fiber节点就会添加一个update.expirationTimes类似于时间戳的字段，用来表示优先级，该值离当前事件越近，该fiber节点更新的优先级就越高。当前时间如果超过了update.expirationTimes定义的时间，表示update过期了，此时该fiber的update优先级最高，会同步执行该fiber节点的协调和提交阶段，本轮任务中就必须要将该fiber节点更新完。
+
+>一个fiber树有多个fiber节点
+
 ### Commit(提交阶段)
 将协调阶段产生的Effect(副作用)全部执行完，这部分执行页面渲染任务，由于当前执行的任务会让用户页面发生改变，因此`commit阶段任务必须是同步执行`的，不能被打断。
 

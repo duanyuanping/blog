@@ -1,0 +1,4 @@
+- 事件委托对象：document -> reactDom.render传入的container
+- 删除事件池：事件对象异步也能够调用（事件对象受垃圾回收机制清除）
+- 生成周期：componentWillMount、componentWillUpdate、componentWillReceiveProps需要在前面加上UNSAFE_
+- [启发式更新算法](https://github.com/duanyuanping/blog/blob/master/react/fiber.md)
