@@ -20,7 +20,7 @@ MVC 数据流动：View 接收用户动作，View 调用 Controller 中的处理
 
 下面将用代码来更清楚的展示这一块的逻辑：
 
-```
+```js
 // index.html
 <input id="num" type="text" />
 <button id="increase">+</button>
@@ -39,7 +39,7 @@ MVC 数据流动：View 接收用户动作，View 调用 Controller 中的处理
 </script>
 ```
 
-```
+```js
 // View.js
 myapp.View = function(controller) {
   const num = document.getElementById('num');
@@ -59,7 +59,7 @@ myapp.View = function(controller) {
 }
 ```
 
-```
+```js
 // Controller.js
 myapp.Controller = function() {
 	let model, view;
@@ -81,7 +81,7 @@ myapp.Controller = function() {
 }
 ```
 
-```
+```js
 // Model.js
 myapp.Model = function() {
   // 数据存储
@@ -122,7 +122,7 @@ View 响应用户的动作，调用 Presenter 中的函数，Presenter 调用 Mo
 // index.html 文件和上面展示的 HTML 文件一样
 ```
 
-```
+```js
 // view.js
 myapp.View = function(presenter) {
   const num = document.getElementById('num');
@@ -142,7 +142,7 @@ myapp.View = function(presenter) {
 }
 ```
 
-```
+```js
 // Presenter.js
 myapp.Presenter = function() {
   let view, model;
@@ -164,7 +164,7 @@ myapp.Presenter = function() {
 }
 ```
 
-```
+```js
 // model.js
 myapp.Model = function() {
   let val = 0;
