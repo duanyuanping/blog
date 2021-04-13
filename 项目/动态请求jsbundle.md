@@ -11,7 +11,7 @@
   - 初始Page对象，调用Page对象中的fetch函数，进行首屏数据请求的相关工作
   - 调用reduce中的store.getState获取reducer中的数据
   - 使用接口数据替换jsbundle中的锚点内容，替换完成以后，将数据返回
-  - 客户端在回去到数据以后，会去解析渲染jsbundle
+  - 客户端在获取到数据以后，会去解析渲染jsbundle
   - rn页面在请求首屏数据前会去检测__initialState是否存在可用的值，如果有就表示该jsbundle是直出成功得到的，就不会请求首屏数据；如果没有就表示是非直出或者直出失败，就会重新请求首屏数据
 
 - 直出服务性能
@@ -92,7 +92,7 @@ function enable(options) {
 ```
 上面处理以后，所有页面都能够收到未捕获的promise reject消息。
 
-Promise reject报出来的语法错误会有错误堆栈，我们可以像前面处理语法错误那样判断当前异常属于那个页面。但是，代码中主动调用reject抛出来的错误没有错误堆栈，我们没办法来，因此需要我们需要借助`Stack().stack`来获取当前执行的堆栈。我们看enable源码可以知道，promise中使用了setTimeout来异步执行onUnhandle回调，这导致原来的堆栈不存在，我们需要在执行setTimeout之前获取当前堆栈，我们继续修改promise插件。
+Promise reject报出来的语法错误会有错误堆栈，我们可以像前面处理语法错误那样判断当前异常属于那个页面。但是，代码中主动调用reject抛出来的错误没有错误堆栈，我们没办法分辨是哪个业务报出来的，因此需要我们需要借助`Stack().stack`来获取当前执行的堆栈。我们看enable源码可以知道，promise中使用了setTimeout来异步执行onUnhandle回调，这导致原来的堆栈不存在，我们需要在执行setTimeout之前获取当前堆栈，我们继续修改promise插件。
 ```js
 // promise/setimmediate/rejection-tracking.js
 function enable(options) {
