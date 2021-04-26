@@ -34,6 +34,7 @@ cdn缓存控制：使用http中的`cache-control`头，设置`max-age`，如果�
 ## cdn劫持
 
 ### cdn劫持防范方式：https
+### csp
 ### cdn劫持防范方式：sri
 通过想link、script标签中写入integrity属性，浏览器通过对比当前请求回来的资源内容的hash与integrity属性中定义的hash是否一致，来判断当前资源是否被篡改或者拦截。
 ```js
